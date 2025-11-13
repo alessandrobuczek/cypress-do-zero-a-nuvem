@@ -33,7 +33,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   })
 
 
-it.only  ('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', () => {
+it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', () => {
 
   cy.get('#firstName').type('Alessandro')
   cy.get('#lastName').type('Buczek')
@@ -44,6 +44,62 @@ it.only  ('exibe mensagem de erro ao submeter o formulário com um email com for
   cy.get('.error').should('be.visible') // verificação do resultado esperado
 })
 
+// verificação do resultado esperado
+it('campo telefone continua vazio quando preenchido com valor não numérico', () => {
+cy.get('#phone').type('abcdefghij').should('have.value', '')  // tentando preencher com letras
 })
 
+it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
+  //teste para verificar se a mensagem de erro é exibida quando o telefone é marcado como obrigatório mas não é preenchido
+  cy.get('#firstName').type('Alessandro')
+  cy.get('#lastName').type('Buczek')
+  cy.get('#email').type('abuczek@gmail,com') //email com formatação inválida porque foi digitado com vírgula
+  cy.get('#open-text-area').type('teste')
+  cy.get('[for="phone-checkbox"]')
+  cy.get('button[type="submit"]').click()
+
+  //verificação do resultado esperado
+  //deve apresentar a mensagem de erro porque o telefone é obrigatório
+  cy.get('.error').should('be.visible')
+})
+
+it('preenche e limpa os campos nome, sobrenome, email e telefone', () => {
+//comando clear para limpar os campos
+//preenchendo validdando se foi preenchido corretamente e limpando os campos validando se estão vazios
+//usando os comandos type, should e clear
+
+  cy.get('#firstName').type('Alessandro').should('have.value', 'Alessandro').clear().should('have.value', '')
+  cy.get('#lastName').type('Buczek').should('have.value', 'Buczek').clear().should('have.value', '')
+  cy.get('#email').type('abuczek@gmail.com').should('have.value', 'abuczek@gmail.com').clear().should('have.value', '')
+
+})
+
+it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', () => {
+  //não preenchendo nenhum campo e clicando em enviar
+cy.get('button[type="submit"]').click()
+//verificação do resultado esperado aparentando a mensagem de erro
+cy.get('.error').should('be.visible')
+})
+
+it.only('envia o formulário com sucesso usando um comando customizado', () => {
+//usando o comando customizado criado em cypress/support/commands.js 
+//função para não repetir o código de preenchimento dos campos obrigatórios
+//criando uma variável para passar os dados para o comando customizado
+
+  const data = {
+    firstName: 'Alessandro',
+    lastName: 'Buczek',
+    email: 'abuczek@gmail.com',
+    Text: 'Teste de comando customizado com variáve'
+  }
+
+cy.fillMandatoryFieldsAndSubmit(data)//usando a variável data para preencher os campos
+//cy.fillMandatoryFieldsAndSubmit() //usando os valores padrão definidos no comando customizado do arquivo commands.js
+//verificação do resultado esperado
+cy.get('.success').should('be.visible')
+  
+
+})
+
+})
 
