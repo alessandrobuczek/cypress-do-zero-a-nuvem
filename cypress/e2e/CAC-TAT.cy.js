@@ -97,7 +97,6 @@ cy.fillMandatoryFieldsAndSubmit(data)//usando a variável data para preencher os
 //cy.fillMandatoryFieldsAndSubmit() //usando os valores padrão definidos no comando customizado do arquivo commands.js
 //verificação do resultado esperado
 cy.get('.success').should('be.visible')
-  
 
 })
 
