@@ -219,7 +219,46 @@ cy.get('#file-upload')
  }) 
 
 })
+
+
+
+ //** COMANDO invoke  com remoção do target para a pagina abrir na mesma aba */
+
+ //comando invoke para acessar um elemento que está oculto na página e exibi-lo
+ //em html um target _blank indica que o link abre em outra aba
+ /*por exemplo: </div>
+        <button type="submit" class="button">Enviar</button>
+        <div id="privacy">
+          <a href="privacy.html" target="_blank">Política de Privacidade</a>
+        </div>*/
+
+it('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', () => {
+  //cy.get('#privacy a').should('have.attr', 'target', '_blank') //verificando se o link tem o atributo target com o valor _blank que indica que abre em outra aba
+//cy.get('a') --seletor muito genérico, por isso é recomendavel usar o comando contains para selecionar pelo texto
+cy.contains('a', 'Política de Privacidade') //usamos a tag genérica mais buscamos o seletor pelo texto
+.should('have.attr', 'href', 'privacy.html') //verificando se o link tem o atributo target com o valor _blank que indica que abre em outra aba
+//usando and com should para fazer mais de uma verificação no mesmo comando
+.and('have.attr', 'target', '_blank') //verificando se o link tem o atributo target com o valor _blank que indica que abre em outra aba
+  })
+
+  it('acessa a página da política de privacidade removendo o target e então clicando no link', () => {
+    //removendo o atributo target para abrir na mesma aba
+    cy.contains('a', 'Política de Privacidade')
+    .invoke('removeAttr', 'target') //removendo o atributo target para abrir na mesma aba
+    .click() //clicando no link
+    //verificando se a página carregou corretamente e contento o título esperado
+    cy.contains('h1', 'CAC TAT - Política de Privacidade').should('be.visible') //verificando se o título da página é o esperado
+  })
+
+
+  //**CONFIGURAÇÃO DE RESOLUÇÃO DE TELA PARA TESTES MOBILE
+  //ALTERADO O ARQUIVO PACKAGE.JSON PARA INCLUIR UM NOVO SCRIPT
+  //"cy:open:mobile": "cypress open --config viewportWidth=410,viewportHeight=860",
+
+
+
 })
+
 
 
 
