@@ -34,7 +34,7 @@ document.querySelector('button[type="submit"]')
       return showAndHideErrorMessage()
     }
     if (!emailField.value.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
-     // return showAndHideErrorMessage()
+     return showAndHideErrorMessage() //Aqui foi feito um teste para forçar o erro de email inválido
     }
     firstNameField.value = ''
     lastNameField.value = ''
